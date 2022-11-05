@@ -25,8 +25,8 @@ public class ServerController extends Thread {
             try {
                 clientSocket = serverSocket.accept();
                 System.out.println("Client connected");
-                var client = new ServerClientController(clientSocket, this);
-                client.start();
+                var clientController = new ServerClientController(clientSocket, this);
+                clientController.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }

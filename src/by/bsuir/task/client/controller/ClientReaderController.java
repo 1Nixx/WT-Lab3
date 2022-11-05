@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ClientInputController extends Thread {
+public class ClientReaderController extends Thread {
     private final ClientController client;
 
-    public ClientInputController(ClientController client) {
+    public ClientReaderController(ClientController client) {
         this.client = client;
     }
 

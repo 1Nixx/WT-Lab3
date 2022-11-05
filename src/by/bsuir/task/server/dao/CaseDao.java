@@ -34,10 +34,10 @@ public class CaseDao {
     private CaseDao() {
         lock = new ReentrantReadWriteLock();
         cases = new HashMap<>();
-        init();
+        LoadData();
     }
 
-    private void init() {
+    private void LoadData() {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -77,7 +77,7 @@ public class CaseDao {
             lock.writeLock().lock();
             _case.setId(cases.keySet().stream().max(Comparator.comparingInt(a -> a)).get() + 1);
             cases.put(_case.getId(), _case);
-            update();
+            UpdateData();
         } finally {
             lock.writeLock().unlock();
         }
@@ -88,29 +88,29 @@ public class CaseDao {
             lock.writeLock().lock();
             _case.setId(id);
             cases.put(id, _case);
-            update();
+            UpdateData();
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    private void update() {
+    private void UpdateData() {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.newDocument();
-            Element rootEle = doc.createElement("cases");
+            Document document = db.newDocument();
+            Element rootFile = document.createElement("cases");
             for(var _case : getAll()) {
-                Element caseEle = ServiceFactory.getInstance().getCaseService().createNode(doc, _case);
-                rootEle.appendChild(caseEle);
+                Element caseEle = ServiceFactory.getInstance().getCaseService().createNode(document, _case);
+                rootFile.appendChild(caseEle);
             }
 
-            doc.appendChild(rootEle);
+            document.appendChild(rootFile);
 
             try {
                 Transformer tr = TransformerFactory.newInstance().newTransformer();
                 tr.setOutputProperty(OutputKeys.INDENT, "yes");
-                tr.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(CASES_PATH)));
+                tr.transform(new DOMSource(document), new StreamResult(new FileOutputStream(CASES_PATH)));
 
             } catch (IOException | TransformerException e) {
                 e.printStackTrace();

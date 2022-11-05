@@ -14,8 +14,8 @@ public class ClientController extends Thread {
     public void run() {
         try {
             Socket socket = new Socket(InetAddress.getLocalHost(), ServerController.PORT);
-            var input = new ClientInputController(this);
-            input.start();
+            var inputController = new ClientReaderController(this);
+            inputController.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             String request;

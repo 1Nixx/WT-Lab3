@@ -12,7 +12,7 @@ public class ServerClientController extends Thread {
     private final Socket socket;
     private final ServerController serverController;
 
-    private BufferedReader reader;
+    private BufferedReader bufferedReader;
     private PrintWriter writer;
 
     public ServerClientController(Socket socket, ServerController serverController) {
@@ -23,7 +23,7 @@ public class ServerClientController extends Thread {
     @Override
     public void run() {
         try {
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,7 +63,7 @@ public class ServerClientController extends Thread {
 
     private String readMessage() {
         try {
-            return reader.readLine();
+            return bufferedReader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
